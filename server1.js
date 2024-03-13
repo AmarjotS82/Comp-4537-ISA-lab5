@@ -49,8 +49,6 @@ function sendDefault(){
 
     xhr.open("POST", "https://isa-lab5-backend.vercel.app/execInsert", true)
     xhr.setRequestHeader("Content-Type", "application/json")
-      let names = ["Sara Brown","Jhon Smith", "Jack Ma", "Elon Musk"]
-      let dates = ["1991-01-01","1941-01-01","1961-01-30","1999-01-01"]
       xhr.onreadystatechange = () =>{
           if (xhr.readyState === 4){
               if(xhr.status == 200){
@@ -60,7 +58,7 @@ function sendDefault(){
                 document.getElementById("error").textContent = msg 
               }
           } else{
-              document.getElementById("error").textContent = "Error query failed: "
+              document.getElementById("error").textContent = queryErrorMessage
           }
       }
       
@@ -101,13 +99,13 @@ function sendOwn(){
                             let table = new responseTable()
                            let headings  = []
                             if(queryResult[0].patientid){
-                                headings.push("patientid")
+                                headings.push(patientIdHeaading)
                             }
                             if(queryResult[0].name){
-                                headings.push("name")
+                                headings.push(nameHeaading)
                             }
                              if(queryResult[0].dateofbirth){
-                                headings.push("dateofbirth")
+                                headings.push(dobHeaading)
                             }
                             table.create_headings(headings)
                             queryResult.forEach(row => {
@@ -133,7 +131,7 @@ function sendOwn(){
                         
                     }
                 } else{
-                    document.getElementById("error").textContent = "Error: Server responded with status "  + xhr.status;
+                    document.getElementById("error").textContent = serverErrorMessage  + xhr.status;
                 }
             }
     }else if(firstWord.toLowerCase().includes("insert")){
@@ -149,7 +147,7 @@ function sendOwn(){
                     document.getElementById("error").textContent = msg 
                 }
             } else{
-                document.getElementById("error").textContent = "Error query failed"
+                document.getElementById("error").textContent = queryErrorMessage
             }
         }
         
@@ -170,7 +168,7 @@ function sendOwn(){
                     document.getElementById("error").textContent = customized_msg 
                 }
             } else{
-                document.getElementById("error").textContent = "Error query failed"
+                document.getElementById("error").textContent = queryErrorMessage
             }
         }
         
@@ -186,13 +184,14 @@ class TextArea{
         this.textArea = document.createElement("textarea")
         this.textArea.id = "textarea"
         
-        this.textArea.placeholder = "Query"
+        this.textArea.placeholder = testArea_Placeholder
         this.textArea.style.backgroundColor = "skyblue"
         this.textArea.style.width = 15 + "em"
         this.textArea.style.height = 5 + "em"
         document.body.appendChild(this.textArea)
     }
 }
+
 
 class responseTable{
     constructor(){
@@ -236,10 +235,10 @@ class responseTable{
 
 
 let br = document.createElement("br")
-let defaultBtn = new defaultQueryButton("defaultQuery", "Default", "white", "brown", 4,2,50,50,sendDefault);
+let defaultBtn = new defaultQueryButton("defaultQuery", defaultBtnDesc, "white", "brown", 4,2,50,50,sendDefault);
 document.body.appendChild(br)
 let textarea = new TextArea()
 
-let ownBtn = new ownQueryButton("ownQuery", "Submit", "black", "yellow", 4,2,80,80,sendOwn)
+let ownBtn = new ownQueryButton("ownQuery", submitBtnDesc, "black", "yellow", 4,2,80,80,sendOwn)
 
 let para = new errorMessageParagraph()
